@@ -1,10 +1,68 @@
-import { Mail } from "lucide-react";
+import { Mail, Clock } from "lucide-react";
 import { styles } from "../ui.js";
-export default function Join({ joinForm, setJoinForm, submitJoin, joinSent, joinError, joinErrors }) {
+
+function isJoinWindowOpen(jw) {
+  if (!jw || !jw.openDate || !jw.closeDate) return true;
+  const now = new Date();
+  const open = new Date(jw.openDate + "T" + (jw.openTime || "00:00"));
+  const close = new Date(jw.closeDate + "T" + (jw.closeTime || "23:59"));
+  return now >= open && now <= close;
+}
+
+function formatNextOpen(jw) {
+  if (!jw || !jw.openDate) return null;
+  const d = new Date(jw.openDate + "T" + (jw.openTime || "09:00"));
+  return d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })
+    + " at " + d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+}
+
+export default function Join({ joinForm, setJoinForm, submitJoin, joinSent, joinError, joinErrors, joinWindow }) {
   const field = (key) => ({
     ...styles.input,
     ...(joinErrors[key] ? styles.inputError : {}),
   });
+
+  const isOpen = isJoinWindowOpen(joinWindow);
+
+  if (!isOpen) {
+    return (
+      <section style={{ ...styles.section, maxWidth: 520, textAlign: "center" }}>
+        <div style={styles.sectionEyebrow}>MEMBERSHIP</div>
+        <h2 style={styles.h2}>Join BUILDS</h2>
+        <div style={{
+          background: "var(--surface)",
+          border: "1px solid var(--border)",
+          borderLeft: "4px solid var(--accent)",
+          padding: "32px 28px",
+          marginTop: 12,
+        }}>
+          <Clock size={32} style={{ color: "var(--accent)", marginBottom: 14 }} />
+          <div style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 20, fontWeight: 700, color: "var(--ink)", marginBottom: 10 }}>
+            Applications are currently closed
+          </div>
+          <p style={{ fontSize: 15, color: "var(--ink-muted)", lineHeight: 1.7, marginBottom: 16 }}>
+            The next joining session will start on
+          </p>
+          <div style={{
+            fontFamily: "'Playfair Display', Georgia, serif",
+            fontSize: 22,
+            fontWeight: 700,
+            color: "var(--accent)",
+          }}>
+            {formatNextOpen(joinWindow)}
+          </div>
+          <p style={{ fontSize: 13, color: "var(--ink-faint)", marginTop: 14, lineHeight: 1.6 }}>
+            Check back then, or follow us on Instagram{" "}
+            <a href="https://instagram.com/builds_h11" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", fontWeight: 600, textDecoration: "none" }}>
+              @builds_h11
+            </a>{" "}
+            for updates.
+          </p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section style={{ ...styles.section, maxWidth: 640 }}>
       <div style={styles.sectionEyebrow}>MEMBERSHIP</div>

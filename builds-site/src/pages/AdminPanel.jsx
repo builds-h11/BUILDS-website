@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Plus, Pencil, Trash2, LogOut, Download } from "lucide-react";
+import { Plus, Pencil, Trash2, LogOut, Download, Settings, Clock } from "lucide-react";
 import { styles, fmtDate } from "../ui.js";
-export default function AdminPanel({ posts, addPost, updatePost, removePost, submissions, removeSubmission, images, addImage, removeImage, logout }) {
+export default function AdminPanel({ posts, addPost, updatePost, removePost, submissions, removeSubmission, images, addImage, removeImage, joinWindow, persistJoinWindow, logout }) {
   const [panel, setPanel] = useState("blog");
   const emptyPost = { title: "", author: "", excerpt: "", content: "" };
   const [post, setPost] = useState(emptyPost);
@@ -9,6 +9,8 @@ export default function AdminPanel({ posts, addPost, updatePost, removePost, sub
   const [imgCaption, setImgCaption] = useState("");
   const [imgPreview, setImgPreview] = useState(null);
   const [imgError, setImgError] = useState("");
+  const [jwDraft, setJwDraft] = useState(joinWindow);
+  const [jwSaved, setJwSaved] = useState(false);
 
   const exportSubmissionsCSV = () => {
     const cols = ["name", "enrollment", "department", "semester", "interests", "email", "whatsapp", "reason", "date"];
@@ -50,7 +52,6 @@ export default function AdminPanel({ posts, addPost, updatePost, removePost, sub
     reader.onload = () => {
       const img = new Image();
       img.onload = () => {
-        // downscale so stored base64 stays well under the per-key size limit
         const maxDim = 1000;
         const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
         const canvas = document.createElement("canvas");
@@ -74,6 +75,14 @@ export default function AdminPanel({ posts, addPost, updatePost, removePost, sub
     setImgCaption("");
   };
 
+  const saveJoinWindow = () => {
+    persistJoinWindow(jwDraft);
+    setJwSaved(true);
+    setTimeout(() => setJwSaved(false), 2500);
+  };
+
+  const inputStyle = { ...styles.input, width: "100%" };
+
   return (
     <section style={styles.section}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
@@ -87,7 +96,7 @@ export default function AdminPanel({ posts, addPost, updatePost, removePost, sub
       </div>
 
       <div style={styles.adminTabs}>
-        {[["blog", "Dispatches"], ["gallery", `Gallery (${images.length})`], ["submissions", `Applications (${submissions.length})`]].map(([id, label]) => (
+        {[["blog", "Dispatches"], ["gallery", `Gallery (${images.length})`], ["submissions", `Applications (${submissions.length})`], ["settings", "Settings"]].map(([id, label]) => (
           <div key={id} style={{ ...styles.adminTab, ...(panel === id ? styles.adminTabActive : {}) }} onClick={() => setPanel(id)}>
             {label}
           </div>
@@ -186,6 +195,43 @@ export default function AdminPanel({ posts, addPost, updatePost, removePost, sub
               <Trash2 size={17} style={{ cursor: "pointer", color: "var(--accent)", flexShrink: 0, marginTop: 2 }} onClick={() => removeSubmission(s.id)} />
             </div>
           ))}
+        </div>
+      )}
+
+      {panel === "settings" && (
+        <div style={{ marginTop: 24, maxWidth: 480 }}>
+          <div style={{ ...styles.pillarCard, padding: 28 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
+              <Clock size={18} style={{ color: "var(--accent)" }} />
+              <div style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 18, fontWeight: 700, color: "var(--ink)" }}>Joining Window</div>
+            </div>
+            <p style={{ fontSize: 13.5, color: "var(--ink-muted)", marginBottom: 18, lineHeight: 1.6 }}>
+              Set when the Join page accepts applications. Outside this window, visitors see the next opening date.
+            </p>
+
+            <label style={styles.label}>Opens</label>
+            <div style={{ display: "flex", gap: 10, marginBottom: 16 }}>
+              <input type="date" style={inputStyle} value={jwDraft.openDate}
+                onChange={(e) => setJwDraft({ ...jwDraft, openDate: e.target.value })} />
+              <input type="time" style={inputStyle} value={jwDraft.openTime}
+                onChange={(e) => setJwDraft({ ...jwDraft, openTime: e.target.value })} />
+            </div>
+
+            <label style={styles.label}>Closes</label>
+            <div style={{ display: "flex", gap: 10, marginBottom: 20 }}>
+              <input type="date" style={inputStyle} value={jwDraft.closeDate}
+                onChange={(e) => setJwDraft({ ...jwDraft, closeDate: e.target.value })} />
+              <input type="time" style={inputStyle} value={jwDraft.closeTime}
+                onChange={(e) => setJwDraft({ ...jwDraft, closeTime: e.target.value })} />
+            </div>
+
+            <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+              <button className="btn-maroon" style={styles.btnPrimary} onClick={saveJoinWindow}>
+                <Settings size={16} /> Save Schedule
+              </button>
+              {jwSaved && <div style={styles.successNote}>Schedule saved.</div>}
+            </div>
+          </div>
         </div>
       )}
     </section>

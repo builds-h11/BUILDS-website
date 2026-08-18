@@ -190,6 +190,7 @@ export default function BuildsSite() {
   const [posts, setPosts] = useState([]);
   const [submissions, setSubmissions] = useState([]);
   const [images, setImages] = useState([]);
+  const [joinWindow, setJoinWindow] = useState({ openDate: "", openTime: "09:00", closeDate: "", closeTime: "23:59" });
 
   const [isAdmin, setIsAdmin] = useState(false);
   const [emailInput, setEmailInput] = useState("");
@@ -291,6 +292,12 @@ export default function BuildsSite() {
           })
         );
         setImages(galItems.filter(Boolean).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)));
+
+        const jw = await window.storage.get("builds:joinWindow", true).catch(() => null);
+        if (jw?.value) {
+          const parsed = JSON.parse(jw.value);
+          setJoinWindow(parsed);
+        }
       } catch (e) {
         console.error("storage load failed", e);
         setEvents(SEED_EVENTS);
@@ -314,6 +321,12 @@ export default function BuildsSite() {
   const persistPosts = useCallback(async (next) => {
     setPosts(next);
     try { await window.storage.set("builds:posts", JSON.stringify(next), true); }
+    catch (e) { console.error(e); }
+  }, []);
+
+  const persistJoinWindow = useCallback(async (next) => {
+    setJoinWindow(next);
+    try { await window.storage.set("builds:joinWindow", JSON.stringify(next), true); }
     catch (e) { console.error(e); }
   }, []);
 
@@ -562,7 +575,7 @@ export default function BuildsSite() {
           <Route path="/blog/:id" element={<BlogPost posts={posts} />} />
           <Route path="/team" element={<TheHouse />} />
           <Route path="/gallery" element={<Gallery images={images} />} />
-          <Route path="/join" element={<Join joinForm={joinForm} setJoinForm={setJoinForm} submitJoin={submitJoin} joinSent={joinSent} joinError={joinError} joinErrors={joinErrors} />} />
+          <Route path="/join" element={<Join joinForm={joinForm} setJoinForm={setJoinForm} submitJoin={submitJoin} joinSent={joinSent} joinError={joinError} joinErrors={joinErrors} joinWindow={joinWindow} />} />
           <Route path="/more" element={<More />} />
           <Route path="/login" element={<AdminLogin emailInput={emailInput} setEmailInput={setEmailInput} pwInput={pwInput} setPwInput={setPwInput} handleLogin={handleLogin} loginError={loginError} />} />
           <Route
@@ -572,6 +585,7 @@ export default function BuildsSite() {
                 posts={posts} addPost={addPost} updatePost={updatePost} removePost={removePost}
                 submissions={submissions} removeSubmission={removeSubmission}
                 images={images} addImage={addImage} removeImage={removeImage}
+                joinWindow={joinWindow} persistJoinWindow={persistJoinWindow}
                 logout={() => { getFirebase().then(({ auth, signOut }) => signOut(auth)); navigate("/"); }}
               />
             ) : (
