@@ -16,6 +16,8 @@ import Gallery from "./pages/Gallery.jsx";
 import Join from "./pages/Join.jsx";
 import AdminLogin from "./pages/AdminLogin.jsx";
 import AdminPanel from "./pages/AdminPanel.jsx";
+import BottomNav from "./pages/BottomNav.jsx";
+import More from "./pages/More.jsx";
 
 
 /* ---------------------------------------------------------
@@ -456,6 +458,7 @@ export default function BuildsSite() {
           --success-bg: #EEF3E8;
           --success-border: #C3D6AE;
           --success-text: #3D5A2A;
+          --cal-event: #1E7B45;
         }
         [data-theme="dark"] {
           --bg: #0B1220;
@@ -472,6 +475,7 @@ export default function BuildsSite() {
           --success-bg: #16231A;
           --success-border: #3A5240;
           --success-text: #A9D8A0;
+          --cal-event: #57D98A;
         }
         [data-theme] { transition: background-color .25s ease, color .25s ease, border-color .25s ease; }
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&display=swap');
@@ -485,31 +489,40 @@ export default function BuildsSite() {
         .ev-card { transition: box-shadow .2s ease, transform .2s ease; }
         .ev-card:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(22,35,63,0.12); }
         .cal-month-head:hover { border-color: var(--accent); }
+        .cal-day-btn { transition: background .15s ease; }
+        .cal-day-btn:hover .cal-day-num-event { background: var(--success-bg); }
         .cal-chip { transition: border-color .15s ease, color .15s ease; }
         .cal-chip:hover { border-left-color: var(--brand) !important; color: var(--accent); }
         .btn-maroon { transition: background .2s ease, transform .15s ease; }
         .btn-maroon:hover { background: var(--brand-hover) !important; transform: translateY(-1px); }
         .btn-outline:hover { background: var(--brand); color: #FFFFFF !important; }
+        .more-card:hover { border-color: var(--accent) !important; box-shadow: 0 4px 12px rgba(22,35,63,0.08); }
         .theme-toggle-btn:hover { background: var(--border); }
         input, textarea { font-family: 'Source Serif 4', serif; }
         input:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
         @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+        @media (max-width: 1000px) {
+          .cal-year-grid { grid-template-columns: repeat(2, 1fr) !important; }
+        }
         @media (max-width: 760px) {
           .nav-desktop { display: none !important; }
-          .hamburger-btn { display: block !important; }
+          .hamburger-btn { display: none !important; }
+          .bottom-nav { display: flex !important; }
           .two-col, .pillars-grid, .post-grid, .team-grid, .admin-grid, .gallery-grid { grid-template-columns: 1fr !important; }
           .stats-row { grid-template-columns: repeat(2, 1fr) !important; gap: 24px 16px !important; }
           .org-row-2 { flex-direction: column !important; gap: 36px !important; align-items: center !important; }
           .org-row-3 { grid-template-columns: 1fr !important; max-width: 260px !important; gap: 28px !important; }
           .order-item { flex-direction: column !important; gap: 14px !important; padding: 22px !important; }
+          .main-wrap { padding-bottom: 80px !important; }
         }
         @media (max-width: 480px) {
           .main-wrap { padding-left: 16px !important; padding-right: 16px !important; }
           .hero-section { padding-top: 48px !important; }
         }
+        .bottom-nav { display: none; }
         @media (max-width: 560px) {
-          .cal-day-cell { min-height: 54px !important; padding: 4px 5px !important; }
-          .cal-day-cell .cal-chip { font-size: 0 !important; line-height: 0 !important; height: 6px !important; padding: 0 !important; }
+          .cal-year-grid { grid-template-columns: 1fr !important; }
+          .cal-day-cell { min-height: 40px !important; }
         }
         button:focus-visible, [tabindex]:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
       `}</style>
@@ -603,6 +616,7 @@ export default function BuildsSite() {
           <Route path="/team" element={<TheHouse />} />
           <Route path="/gallery" element={<Gallery images={images} />} />
           <Route path="/join" element={<Join joinForm={joinForm} setJoinForm={setJoinForm} submitJoin={submitJoin} joinSent={joinSent} joinError={joinError} joinErrors={joinErrors} />} />
+          <Route path="/more" element={<More />} />
           <Route path="/login" element={<AdminLogin emailInput={emailInput} setEmailInput={setEmailInput} pwInput={pwInput} setPwInput={setPwInput} handleLogin={handleLogin} loginError={loginError} />} />
           <Route
             path="/admin"
@@ -656,6 +670,7 @@ export default function BuildsSite() {
         </div>
         <div style={styles.footerBottom}>© {new Date().getFullYear()} BUILDS. All motions reserved. &nbsp;|&nbsp; Website created and deployed by Muhammad Haris, GS 2026</div>
       </footer>
+      <BottomNav />
     </div>
   );
 }
