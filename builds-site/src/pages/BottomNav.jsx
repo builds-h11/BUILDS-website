@@ -17,7 +17,6 @@ const styles = {
     right: 0,
     background: "var(--surface)",
     borderTop: "1px solid var(--border)",
-    display: "flex",
     justifyContent: "space-around",
     alignItems: "center",
     padding: "8px 0 12px",
