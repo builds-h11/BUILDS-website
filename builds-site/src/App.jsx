@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import { Menu, X, Sun, Moon, Monitor, Check, Instagram, MessageCircle } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { Menu, X, Instagram, MessageCircle } from "lucide-react";
 import {
   Routes, Route, Link, Navigate, useNavigate, useLocation,
 } from "react-router-dom";
@@ -170,13 +170,6 @@ export default function BuildsSite() {
   }, []);
 
   const [navOpen, setNavOpen] = useState(false);
-  const [theme, setTheme] = useState(() => {
-    try {
-      const saved = localStorage.getItem("builds:theme");
-      if (saved === "light" || saved === "dark" || saved === "system") return saved;
-    } catch (e) { /* ignore — localStorage/matchMedia unavailable */ }
-    return "system";
-  });
   const [systemDark, setSystemDark] = useState(() =>
     !!(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches)
   );
@@ -190,19 +183,7 @@ export default function BuildsSite() {
       else mq.removeListener(onChange);
     };
   }, []);
-  const effectiveTheme = theme === "system" ? (systemDark ? "dark" : "light") : theme;
-  useEffect(() => {
-    try { localStorage.setItem("builds:theme", theme); } catch (e) { /* ignore */ }
-  }, [theme]);
-  const [themeMenuOpen, setThemeMenuOpen] = useState(false);
-  const themeMenuRef = useRef(null);
-  useEffect(() => {
-    const onClick = (e) => {
-      if (themeMenuRef.current && !themeMenuRef.current.contains(e.target)) setThemeMenuOpen(false);
-    };
-    document.addEventListener("mousedown", onClick);
-    return () => document.removeEventListener("mousedown", onClick);
-  }, []);
+  const effectiveTheme = systemDark ? "dark" : "light";
 
   const [events, setEvents] = useState(SEED_EVENTS);
   const [yearEvents, setYearEvents] = useState(SEED_EVENTS);
@@ -496,7 +477,7 @@ export default function BuildsSite() {
         .btn-maroon { transition: background .2s ease, transform .15s ease; }
         .btn-maroon:hover { background: var(--brand-hover) !important; transform: translateY(-1px); }
         .btn-outline:hover { background: var(--brand); color: #FFFFFF !important; }
-        .more-card:hover { border-color: var(--accent) !important; box-shadow: 0 4px 12px rgba(22,35,63,0.08); }
+        .more-card:hover { border-color: var(--accent) !important; box-shadow: 0 4px 12px rgba(22,35,63,0.1); transform: translateY(-2px); }
         .theme-toggle-btn:hover { background: var(--border); }
         input, textarea { font-family: 'Source Serif 4', serif; }
         input:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
@@ -518,6 +499,7 @@ export default function BuildsSite() {
         @media (max-width: 480px) {
           .main-wrap { padding-left: 16px !important; padding-right: 16px !important; }
           .hero-section { padding-top: 48px !important; }
+          .more-grid { grid-template-columns: repeat(2, 1fr) !important; }
         }
         .bottom-nav { display: none; }
         @media (max-width: 560px) {
@@ -553,41 +535,6 @@ export default function BuildsSite() {
               {isAdmin ? "Admin" : "Secretariat"}
             </Link>
           </nav>
-
-          <div style={styles.themeMenuWrap} ref={themeMenuRef}>
-            <button
-              className="theme-toggle-btn"
-              style={styles.themeToggle}
-              onClick={() => setThemeMenuOpen((v) => !v)}
-              aria-label="Choose theme"
-              aria-expanded={themeMenuOpen}
-              title="Choose theme"
-            >
-              {effectiveTheme === "light" ? <Moon size={18} /> : <Sun size={18} />}
-            </button>
-            {themeMenuOpen && (
-              <div style={styles.themeMenu}>
-                {[
-                  { value: "light", label: "Light", icon: <Sun size={16} /> },
-                  { value: "dark", label: "Dark", icon: <Moon size={16} /> },
-                  { value: "system", label: "System", icon: <Monitor size={16} /> },
-                ].map((opt) => (
-                  <div
-                    key={opt.value}
-                    style={{
-                      ...styles.themeMenuOption,
-                      ...(theme === opt.value ? styles.themeMenuOptionActive : {}),
-                    }}
-                    onClick={() => { setTheme(opt.value); setThemeMenuOpen(false); }}
-                  >
-                    {opt.icon}
-                    <span style={{ flex: 1 }}>{opt.label}</span>
-                    {theme === opt.value && <Check size={14} />}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
 
           <button className="hamburger-btn" style={styles.hamburger} onClick={() => setNavOpen((v) => !v)} aria-label="Menu">
             {navOpen ? <X size={22} /> : <Menu size={22} />}
