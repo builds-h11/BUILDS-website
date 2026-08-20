@@ -53,7 +53,7 @@ export default function Join({ joinForm, setJoinForm, submitJoin, joinSent, join
           </div>
           <p style={{ fontSize: 13, color: "var(--ink-faint)", marginTop: 14, lineHeight: 1.6 }}>
             Check back then, or follow us on Instagram{" "}
-            <a href="https://instagram.com/builds_h11" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", fontWeight: 600, textDecoration: "none" }}>
+            <a href="https://instagram.com/builds.bseas" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", fontWeight: 600, textDecoration: "none" }}>
               @builds_h11
             </a>{" "}
             for updates.
