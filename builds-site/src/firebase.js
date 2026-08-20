@@ -14,12 +14,12 @@ import { getAuth } from "firebase/auth";
 // rules you pasted in, not by hiding this object.
 // ─────────────────────────────────────────────────────────────────
 const firebaseConfig = {
- apiKey: "AIzaSyDNavRKONAgHAr1IP2aie5jjTtJ6w_TSKg",
-  authDomain: "builds-website.firebaseapp.com",
-  projectId: "builds-website",
-  storageBucket: "builds-website.firebasestorage.app",
-  messagingSenderId: "445748233950",
-  appId: "1:445748233950:web:793a58560dd0f93c1ba44f"
+  apiKey: "AIzaSyA4LRSE66AKkSRmuUoism3Mb3W32DvdXQM",
+  authDomain: "builds-web-f2c86.firebaseapp.com",
+  projectId: "builds-web-f2c86",
+  storageBucket: "builds-web-f2c86.firebasestorage.app",
+  messagingSenderId: "639785145834",
+  appId: "1:639785145834:web:54116d4579a1cb7504ce93"
 };
 
 export const app = initializeApp(firebaseConfig);
