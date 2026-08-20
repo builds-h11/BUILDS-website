@@ -618,10 +618,10 @@ export default function BuildsSite() {
             </div>
             <div>
               <div style={styles.footerHead}>Contact</div>
-              <div style={styles.footerLink}>builds@bahria.edu.pk</div>
+              <div style={styles.footerLink}>buildsbseas@gmail.com</div>
               <div style={styles.footerLink}>Bahria University, Islamabad</div>
-              <a href="https://instagram.com/builds_h11" target="_blank" rel="noopener noreferrer" style={styles.footerSocialLink}>
-                <Instagram size={15} /> @builds_h11
+              <a href="https://instagram.com/builds.bseas" target="_blank" rel="noopener noreferrer" style={styles.footerSocialLink}>
+                <Instagram size={15} /> @builds.bseas
               </a>
               <a href="https://wa.me/923466291929" target="_blank" rel="noopener noreferrer" style={styles.footerWhatsappBtn}>
                 <MessageCircle size={15} /> Chat on WhatsApp
