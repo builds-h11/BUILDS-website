@@ -1,6 +1,17 @@
 import { Mail, Clock } from "lucide-react";
 import { styles } from "../ui.js";
 
+const LITERARY_ACTIVITIES = [
+  "Reading",
+  "Writing poetry/prose",
+  "Article writing",
+  "Blogging",
+  "Parliamentary Debates or declamations",
+  "Attending book exhibitions or related events",
+  "None",
+  "Other",
+];
+
 function isJoinWindowOpen(jw) {
   if (!jw || !jw.openDate || !jw.closeDate) return true;
   const now = new Date();
@@ -129,6 +140,37 @@ export default function Join({ joinForm, setJoinForm, submitJoin, joinSent, join
           Select both if you'd like to be part of both wings.
         </p>
         {joinErrors.interests && <div style={styles.fieldError}>{joinErrors.interests}</div>}
+
+        <label style={styles.label}>Which of the following literary activities are you currently involved in?</label>
+        <div style={{ ...styles.checkRow, flexWrap: "wrap" }}>
+          {LITERARY_ACTIVITIES.map((act) => (
+            <label key={act} style={styles.checkOption}>
+              <input
+                type="checkbox"
+                checked={joinForm.activities.includes(act)}
+                onChange={(e) => {
+                  const next = e.target.checked
+                    ? [...joinForm.activities, act]
+                    : joinForm.activities.filter((a) => a !== act);
+                  setJoinForm({ ...joinForm, activities: next });
+                }}
+              />
+              {act}
+            </label>
+          ))}
+        </div>
+        {joinForm.activities.includes("Other") && (
+          <input
+            style={{ ...styles.input, marginTop: -4 }}
+            placeholder="Please specify…"
+            value={joinForm.activityOther}
+            maxLength={120}
+            onChange={(e) => setJoinForm({ ...joinForm, activityOther: e.target.value })}
+          />
+        )}
+        {(joinErrors.activities || joinErrors.activityOther) && (
+          <div style={styles.fieldError}>{joinErrors.activities || joinErrors.activityOther}</div>
+        )}
 
         <label style={styles.label}>Why do you want to join?</label>
         <textarea style={{ ...styles.input, minHeight: 100, resize: "vertical" }} value={joinForm.reason}

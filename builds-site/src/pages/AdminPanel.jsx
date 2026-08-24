@@ -13,9 +13,17 @@ export default function AdminPanel({ posts, addPost, updatePost, removePost, sub
   const [jwSaved, setJwSaved] = useState(false);
 
   const exportSubmissionsCSV = () => {
-    const cols = ["name", "enrollment", "department", "semester", "interests", "email", "whatsapp", "reason", "date"];
+    const cols = ["name", "enrollment", "department", "semester", "interests", "activities", "email", "whatsapp", "reason", "date"];
     const escape = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
-    const cellValue = (s, c) => (c === "interests" ? (s.interests || []).join(" & ") : s[c]);
+    const cellValue = (s, c) => {
+      if (c === "interests") return (s.interests || []).join(" & ");
+      if (c === "activities") {
+        const acts = (s.activities || []).filter((a) => a !== "Other");
+        if ((s.activities || []).includes("Other")) acts.push(s.activityOther ? `Other: ${s.activityOther}` : "Other");
+        return acts.join(" & ");
+      }
+      return s[c];
+    };
     const rows = [
       cols.join(","),
       ...submissions.map((s) => cols.map((c) => escape(cellValue(s, c))).join(",")),
@@ -190,6 +198,15 @@ export default function AdminPanel({ posts, addPost, updatePost, removePost, sub
                 <div style={{ fontSize: 13, color: "var(--accent)", fontWeight: 600, marginTop: 2 }}>
                   Wing: {(s.interests && s.interests.length) ? s.interests.join(" & ") : "—"}
                 </div>
+                {s.activities && s.activities.length > 0 && (
+                  <div style={{ fontSize: 13, color: "var(--ink-muted)", marginTop: 2 }}>
+                    Activities: {(() => {
+                      const acts = s.activities.filter((a) => a !== "Other");
+                      if (s.activities.includes("Other")) acts.push(s.activityOther ? `Other: ${s.activityOther}` : "Other");
+                      return acts.join(", ");
+                    })()}
+                  </div>
+                )}
                 {s.reason && <div style={{ fontSize: 13, marginTop: 6, color: "var(--ink-body)" }}>{s.reason}</div>}
               </div>
               <Trash2 size={17} style={{ cursor: "pointer", color: "var(--accent)", flexShrink: 0, marginTop: 2 }} onClick={() => removeSubmission(s.id)} />

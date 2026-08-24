@@ -198,7 +198,7 @@ export default function BuildsSite() {
   const [pwInput, setPwInput] = useState("");
   const [loginError, setLoginError] = useState("");
 
-  const [joinForm, setJoinForm] = useState({ name: "", enrollment: "", department: "", semester: "", interests: [], reason: "", email: "", whatsapp: "" });
+  const [joinForm, setJoinForm] = useState({ name: "", enrollment: "", department: "", semester: "", interests: [], activities: [], activityOther: "", reason: "", email: "", whatsapp: "" });
   const [joinSent, setJoinSent] = useState(false);
   const [joinError, setJoinError] = useState("");
   const [joinErrors, setJoinErrors] = useState({});
@@ -388,6 +388,10 @@ export default function BuildsSite() {
       errs.whatsapp = "Enter a valid WhatsApp number (digits only, e.g. 03001234567).";
     if (f.interests.length === 0)
       errs.interests = "Select at least one wing.";
+    if (f.activities.length === 0)
+      errs.activities = "Select at least one option.";
+    if (f.activities.includes("Other") && !f.activityOther.trim())
+      errs.activityOther = "Please specify your activity.";
     if (Object.keys(errs).length > 0) {
       setJoinErrors(errs);
       return;
@@ -400,7 +404,7 @@ export default function BuildsSite() {
       await window.storage.set(`builds:submissions:app:${id}`, JSON.stringify(entry), true);
       setSubmissions((prev) => [{ id, ...entry }, ...prev]);
       sendApplicationToSheet(entry);
-      setJoinForm({ name: "", enrollment: "", department: "", semester: "", interests: [], reason: "", email: "", whatsapp: "" });
+      setJoinForm({ name: "", enrollment: "", department: "", semester: "", interests: [], activities: [], activityOther: "", reason: "", email: "", whatsapp: "" });
       setJoinSent(true);
       setTimeout(() => setJoinSent(false), 4000);
     } catch (err) {

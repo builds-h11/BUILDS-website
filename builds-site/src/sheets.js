@@ -5,17 +5,25 @@
 
 export const SHEETS_ENDPOINT = "https://script.google.com/macros/s/AKfycbwK59hQg2j9hoi3zgVpmZe-OZy6sOhaPdDje1ElrMJ_ZNb4ZcjFzsW988lU8mY3RsoB/exec";
 
-const payloadFor = (entry) => ({
-  name: entry.name,
-  enrollment: entry.enrollment,
-  department: entry.department,
-  semester: entry.semester,
-  email: entry.email,
-  whatsapp: entry.whatsapp,
-  wings: (entry.interests || []).join(", "),
-  reason: entry.reason,
-  submittedAt: entry.date,
-});
+const payloadFor = (entry) => {
+  const acts = (entry.activities || []).filter((a) => a !== "Other");
+  if ((entry.activities || []).includes("Other")) {
+    const other = (entry.activityOther || "").trim();
+    acts.push(other ? `Other: ${other}` : "Other");
+  }
+  return {
+    name: entry.name,
+    enrollment: entry.enrollment,
+    department: entry.department,
+    semester: entry.semester,
+    email: entry.email,
+    whatsapp: entry.whatsapp,
+    wings: (entry.interests || []).join(", "),
+    activities: acts.join(", "),
+    reason: entry.reason,
+    submittedAt: entry.date,
+  };
+};
 
 export async function sendApplicationToSheet(entry) {
   if (!SHEETS_ENDPOINT) return false;
