@@ -1,4 +1,4 @@
-import { CalendarDays, ScrollText, Users, Info, Lock } from "lucide-react";
+import { CalendarDays, ScrollText, Users, Info, Lock, Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const menuItems = [
@@ -6,6 +6,7 @@ const menuItems = [
   { path: "/calendar", label: "Calendar", icon: CalendarDays },
   { path: "/team", label: "The House", icon: Users },
   { path: "/about", label: "About", icon: Info },
+  { path: "#site-footer", label: "Contact", icon: Mail },
   { path: "/login", label: "Secretariat", icon: Lock },
 ];
 
@@ -84,7 +85,13 @@ export default function More() {
               key={item.path}
               style={styles.card}
               className="more-card"
-              onClick={() => navigate(item.path)}
+              onClick={() => {
+                if (item.path.startsWith("#")) {
+                  document.getElementById(item.path.slice(1))?.scrollIntoView({ behavior: "smooth" });
+                } else {
+                  navigate(item.path);
+                }
+              }}
             >
               <div style={styles.iconWrap}>
                 <Icon size={22} strokeWidth={2} />

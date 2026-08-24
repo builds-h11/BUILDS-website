@@ -238,6 +238,7 @@ export const styles = {
   orgAvatar: { borderRadius: 6, background: "var(--brand)", color: "#FFFFFF", fontFamily: serif, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 12px", flexShrink: 0 },
   orgCard: { background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 4, padding: "18px 16px", textAlign: "center", width: "100%", maxWidth: 220, boxShadow: "0 2px 6px rgba(22,35,63,0.05)" },
   orgCardBig: { background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 4, padding: "26px 24px", textAlign: "center", width: "100%", maxWidth: 280, boxShadow: "0 4px 14px rgba(22,35,63,0.08)" },
+  orgCardSmall: { background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 4, padding: "16px 12px", textAlign: "center", width: "100%", maxWidth: 176, boxShadow: "0 2px 6px rgba(22,35,63,0.05)" },
   orgCardStatic: { background: "var(--surface)", border: "1px dashed var(--border)", borderRadius: "50%", width: 96, height: 96, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", margin: "0 auto", padding: 8 },
   orgRole: { fontFamily: utility, fontSize: 10.5, letterSpacing: 0.4, color: "var(--accent)", textTransform: "uppercase", fontWeight: 600, marginBottom: 2 },
   orgRoleBig: { fontFamily: utility, fontSize: 12, letterSpacing: 0.6, color: "var(--accent)", textTransform: "uppercase", fontWeight: 600, marginBottom: 4 },
@@ -257,6 +258,12 @@ export const styles = {
 
   deptButton: { display: "flex", alignItems: "center", justifyContent: "center", gap: 8, background: "var(--brand)", color: "#FFFFFF", border: "none", borderRadius: 4, padding: "14px 16px", fontFamily: utility, fontSize: 13.5, fontWeight: 600, letterSpacing: 0.5, cursor: "pointer", boxShadow: "0 2px 8px rgba(22,35,63,0.15)", width: "100%" },
   deptButtonOpen: { background: "var(--brand-hover)" },
+
+  boardButton: { display: "flex", alignItems: "center", justifyContent: "center", gap: 10, background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 12, padding: "12px 18px", cursor: "pointer", boxShadow: "0 2px 8px rgba(22,35,63,0.08)", color: "var(--ink)" },
+  boardButtonOpen: { borderColor: "var(--accent)", boxShadow: "0 4px 12px rgba(22,35,63,0.12)" },
+  boardRow: { display: "flex", alignItems: "center", gap: 12, width: "min(260px, 100%)", borderBottom: "1px solid var(--border)", padding: "9px 4px" },
+  boardIndex: { fontFamily: utility, fontSize: 11, fontWeight: 600, letterSpacing: 1, color: "var(--accent)", width: 30, textAlign: "right", flexShrink: 0 },
+  boardName: { fontFamily: body, fontSize: 13.5, color: "var(--ink-secondary)" },
 
   expandWrap: { display: "grid", gridTemplateRows: "0fr", opacity: 0, transition: "grid-template-rows 480ms cubic-bezier(0.22, 1, 0.36, 1), opacity 420ms ease", width: "100%" },
   expandWrapOpen: { gridTemplateRows: "1fr", opacity: 1 },

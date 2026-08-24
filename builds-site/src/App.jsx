@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Menu, X, Instagram, MessageCircle } from "lucide-react";
+import { Menu, X, Instagram, MessageCircle, Mail } from "lucide-react";
 import {
   Routes, Route, Link, Navigate, useNavigate, useLocation,
 } from "react-router-dom";
@@ -491,6 +491,12 @@ export default function BuildsSite() {
         .btn-maroon:hover { background: var(--brand-hover) !important; transform: translateY(-1px); }
         .btn-outline:hover { background: var(--brand); color: #FFFFFF !important; }
         .more-card:hover { border-color: var(--accent) !important; box-shadow: 0 4px 12px rgba(22,35,63,0.1); transform: translateY(-2px); }
+        .bod-row:last-child { border-bottom: none !important; }
+        @media (max-width: 760px) {
+          .dir-panel { display: flex !important; flex-direction: column !important; align-items: center !important; }
+          .dir-panel > div { gridColumn: auto !important; width: 100% !important; }
+          .dir-panel-coords { justify-content: center !important; flex-direction: row !important; }
+        }
         .theme-toggle-btn:hover { background: var(--border); }
         input, textarea { font-family: 'Source Serif 4', serif; }
         input:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
@@ -547,6 +553,14 @@ export default function BuildsSite() {
             >
               {isAdmin ? "Admin" : "Secretariat"}
             </Link>
+            <button
+              type="button"
+              className="builds-link"
+              style={{ ...styles.navLink, background: "none", border: "none", padding: 0 }}
+              onClick={() => document.getElementById("site-footer")?.scrollIntoView({ behavior: "smooth" })}
+            >
+              Contact
+            </button>
           </nav>
 
           <button className="hamburger-btn" style={styles.hamburger} onClick={() => setNavOpen((v) => !v)} aria-label="Menu">
@@ -596,7 +610,7 @@ export default function BuildsSite() {
         </Routes>
       </main>
 
-      <footer style={styles.footer}>
+      <footer id="site-footer" style={styles.footer}>
         <div style={styles.footerInner}>
           <div style={styles.footerBrandRow}>
             <div style={styles.footerLogoChip}>
@@ -620,6 +634,9 @@ export default function BuildsSite() {
               <div style={styles.footerHead}>Contact</div>
               <div style={styles.footerLink}>buildsbseas@gmail.com</div>
               <div style={styles.footerLink}>Bahria University, Islamabad</div>
+              <a href="mailto:mssc.h11@bahria.edu.pk" style={styles.footerSocialLink}>
+                <Mail size={15} /> Complaints &amp; Feedback: mssc.h11@bahria.edu.pk
+              </a>
               <a href="https://instagram.com/builds.bseas" target="_blank" rel="noopener noreferrer" style={styles.footerSocialLink}>
                 <Instagram size={15} /> @builds.bseas
               </a>

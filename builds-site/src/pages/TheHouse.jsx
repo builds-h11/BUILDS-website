@@ -34,6 +34,9 @@ const ORG_DEPARTMENTS = [
   },
 ];
 
+const BOARD_MEMBERS = Array.from({ length: 7 }, () => "To be announced");
+const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII"];
+
 function OrgAvatar({ label, photo, size = 48 }) {
   const [errored, setErrored] = useState(false);
   if (photo && !errored) {
@@ -53,28 +56,31 @@ function OrgAvatar({ label, photo, size = 48 }) {
   );
 }
 
-function OrgCard({ role, name, photo }) {
+function OrgCard({ role, name, photo, small }) {
   return (
-    <div style={styles.orgCardBig}>
-      <OrgAvatar label={name} photo={photo} size={128} />
-      <div style={styles.orgRoleBig}>{role}</div>
-      <div style={styles.orgNameBig}>{name}</div>
+    <div style={small ? styles.orgCardSmall : styles.orgCardBig}>
+      <OrgAvatar label={name} photo={photo} size={small ? 88 : 128} />
+      <div style={small ? styles.orgRole : styles.orgRoleBig}>{role}</div>
+      <div style={small ? styles.orgName : styles.orgNameBig}>{name}</div>
     </div>
   );
 }
 
 export default function TheHouse() {
   const [openDept, setOpenDept] = useState(null);
+  const [boardOpen, setBoardOpen] = useState(false);
   const toggle = (id) => setOpenDept((cur) => (cur === id ? null : id));
   const activeDept = ORG_DEPARTMENTS.find((d) => d.id === openDept) || null;
+  const activeIdx = ORG_DEPARTMENTS.findIndex((d) => d.id === openDept);
 
   return (
     <section style={styles.section}>
       <div style={styles.sectionEyebrow}>THE HOUSE</div>
       <h2 style={styles.h2}>Cabinet &amp; Wings</h2>
       <p style={{ ...styles.bodyText, maxWidth: 640, marginBottom: 12 }}>
-        The Society's structure, top to bottom. Tap a department to see its directorate —
-        opening one closes the others.
+        The Society's structure, top to bottom. Directors sit beneath their wings —
+        tap a wing to reveal its deputy directorate and coordinators (opening one
+        closes the others), or tap the Board of Directors for its membership.
       </p>
 
       <div style={styles.orgChart}>
@@ -110,33 +116,48 @@ export default function TheHouse() {
                         style={{ transition: "transform 300ms ease", transform: isOpen ? "rotate(180deg)" : "rotate(0deg)", flexShrink: 0 }}
                       />
                     </button>
+                    <div style={styles.orgStemShort} />
+                    <OrgCard role={dept.director.role} name={dept.director.name} photo={dept.director.photo} small />
                   </div>
                 );
               })}
             </div>
 
-            {/* Expanded directorate — one shared full-width panel, so it never fights the button grid for width, and level 5 coordinators can sit in a true horizontal row */}
+            {/* Expanded directorate — one shared full-width panel; its content is column-aligned so it opens beneath the selected wing's own director */}
             <div style={{ ...styles.expandWrap, ...(activeDept ? styles.expandWrapOpen : {}) }}>
               <div style={styles.expandInner}>
                 {activeDept && (
-                  <>
-                    <div style={styles.orgStemShort} />
-                    {/* Level 4: Deputy Director */}
-                    <OrgCard role={activeDept.director.role} name={activeDept.director.name} photo={activeDept.director.photo} />
-                    <div style={styles.orgStemShort} />
-                    <OrgCard role={activeDept.dd.role} name={activeDept.dd.name} photo={activeDept.dd.photo} />
-                    <div style={styles.orgStemShort} />
-                    {activeDept.coordinators.length > 1 && <div style={styles.orgBarSmall} />}
-                    {/* Level 5: Coordinators — equal width, side by side */}
-                    <div style={styles.coordRow}>
-                      {activeDept.coordinators.map((c) => (
-                        <div key={c.role} style={styles.coordCol}>
-                          {activeDept.coordinators.length > 1 && <div style={styles.orgStemTiny} />}
-                          <OrgCard role={c.role} name={c.name} photo={c.photo} />
-                        </div>
-                      ))}
+                  <div className="dir-panel" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: 32, width: "100%", maxWidth: 640, margin: "0 auto", alignItems: "start" }}>
+                    <div style={{ gridColumn: `${activeIdx + 1} / ${activeIdx + 2}`, display: "flex", flexDirection: "column", alignItems: "center" }}>
+                      <div style={styles.orgStemShort} />
+                      <OrgCard role={activeDept.dd.role} name={activeDept.dd.name} photo={activeDept.dd.photo} />
                     </div>
-                  </>
+                    {activeDept.coordinators.length > 1 && (
+                      <div
+                        className="dir-panel-coords"
+                        style={{
+                          gridColumn: "1 / -1",
+                          display: "flex",
+                          gap: 24,
+                          justifyContent: activeIdx === 0 ? "flex-start" : activeIdx === 1 ? "center" : "flex-end",
+                          flexWrap: "wrap",
+                          width: "100%",
+                        }}
+                      >
+                        {activeDept.coordinators.map((c) => (
+                          <div key={c.role} style={styles.coordCol}>
+                            <div style={styles.orgStemTiny} />
+                            <OrgCard role={c.role} name={c.name} photo={c.photo} small />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {activeDept.coordinators.length === 1 && (
+                      <div style={{ gridColumn: "1 / -1", display: "flex", justifyContent: activeIdx === 0 ? "flex-start" : activeIdx === 1 ? "center" : "flex-end" }}>
+                        <OrgCard role={activeDept.coordinators[0].role} name={activeDept.coordinators[0].name} photo={activeDept.coordinators[0].photo} small />
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
             </div>
@@ -147,9 +168,32 @@ export default function TheHouse() {
             <div style={styles.orgStemShort} />
             <OrgCard role="General Secretary" name="To be announced" photo="/team/general-secretary.jpg" />
             <div style={styles.orgStemShort} />
-            <div style={styles.orgCardStatic}>
+            <button
+              type="button"
+              style={{ ...styles.boardButton, ...(boardOpen ? styles.boardButtonOpen : {}) }}
+              onClick={() => setBoardOpen((v) => !v)}
+              aria-expanded={boardOpen}
+            >
               <OrgAvatar label="Board of Directors" size={40} />
-              <div style={styles.orgRole}>Board of Directors</div>
+              <div>
+                <div style={styles.orgRole}>Board of Directors</div>
+                <div style={styles.boardName}>7 Members</div>
+              </div>
+              <ChevronDown
+                size={16}
+                style={{ transition: "transform 300ms ease", transform: boardOpen ? "rotate(180deg)" : "rotate(0deg)", flexShrink: 0 }}
+              />
+            </button>
+            <div style={{ ...styles.expandWrap, ...(boardOpen ? styles.expandWrapOpen : {}) }}>
+              <div style={styles.expandInner}>
+                <div style={styles.orgStemShort} />
+                {BOARD_MEMBERS.map((name, i) => (
+                  <div key={i} className="bod-row" style={styles.boardRow}>
+                    <span style={styles.boardIndex}>{ROMAN[i]}</span>
+                    <span style={styles.boardName}>{name}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
