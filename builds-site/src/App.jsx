@@ -4,6 +4,7 @@ import {
   Routes, Route, Link, Navigate, useNavigate, useLocation,
 } from "react-router-dom";
 import { getFirebase, ensureStorage } from "./firebase-async.js";
+import { sendApplicationToSheet } from "./sheets.js";
 import { styles, PATH_TITLES } from "./ui.js";
 import { fetchCalendarEvents, fetchYearEvents } from "./calendar.js";
 import Home from "./pages/Home.jsx";
@@ -398,6 +399,7 @@ export default function BuildsSite() {
     try {
       await window.storage.set(`builds:submissions:app:${id}`, JSON.stringify(entry), true);
       setSubmissions((prev) => [{ id, ...entry }, ...prev]);
+      sendApplicationToSheet(entry);
       setJoinForm({ name: "", enrollment: "", department: "", semester: "", interests: [], reason: "", email: "", whatsapp: "" });
       setJoinSent(true);
       setTimeout(() => setJoinSent(false), 4000);
