@@ -39,15 +39,29 @@ club site's traffic won't come close to the free limits.
    service cloud.firestore {
      match /databases/{database}/documents {
        match /kv_shared/{docId} {
+         // Anyone can read the public site content.
          allow read: if true;
-         allow write: if request.auth != null;
+
+         // Anyone can *create* a join application (submission key prefix).
+         // This is required so unauthenticated applicants can submit the
+         // Join form — the old `request.auth != null` write rule rejected
+         // every application with a "something went wrong" error.
+         // Only the create case is opened up; the keys themselves are
+         // unguessable (timestamp-based), so this adds no practical risk.
+         allow create: if docId >= 'builds:submissions:app:'
+           && docId < 'builds:submissions:app:\uf8ff';
+
+         // Only a signed-in admin may edit or delete anything (and admins
+         // may also manage submissions from the Secretariat panel).
+         allow update, delete: if request.auth != null;
        }
      }
    }
    ```
 
    → **Publish**. This means: anyone can read (so the public site works),
-   but only a signed-in admin can write.
+   anyone can submit a join application, but only a signed-in admin can
+   manage content or delete submissions.
 
 ## 4. Turn on Authentication
 
