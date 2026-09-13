@@ -28,7 +28,7 @@ const ORG_DEPARTMENTS = [
     dd: { role: "Deputy Director", name: "To be announced", photo: "/team/dd-operations.jpg" },
     coordinators: [
       { role: "Media & IT", name: "Abiha Talat", photo: "/team/coordinator-media-it.jpg" },
-      { role: "Marketing", name: "", photo: "/team/coordinator-marketing.jpg" },
+      { role: "Marketing", name: "Muhammad Gillani", photo: "/team/coordinator-marketing.jpg" },
       { role: "Logistics", name: "Hassan Shakeel", photo: "/team/coordinator-logistics.jpg" },
     ],
   },
