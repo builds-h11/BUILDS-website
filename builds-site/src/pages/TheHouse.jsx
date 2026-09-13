@@ -5,31 +5,31 @@ const ORG_DEPARTMENTS = [
   {
     id: "literature",
     label: "Literature",
-    director: { role: "Director of Literature", name: "To be announced", photo: "/team/director-literature.jpg" },
-    dd: { role: "Deputy Director", name: "To be announced", photo: "/team/dd-literature.jpg" },
+    director: { role: "Director of Literature", name: "Abdullah Usman", photo: "/team/director-literature.jpg" },
+    dd: { role: "Deputy Director", name: "Momina Sajid", photo: "/team/dd-literature.jpg" },
     coordinators: [
-      { role: "Coordinator, Books Club", name: "To be announced", photo: "/team/coordinator-books-club.jpg" },
+      { role: "Coordinator, Books Club", name: "Unaisah Hassan", photo: "/team/coordinator-books-club.jpg" },
     ],
   },
   {
     id: "debates",
     label: "Debates",
-    director: { role: "Director of Debates", name: "To be announced", photo: "/team/director-debates.jpg" },
+    director: { role: "Director of Debates", name: "Ayesha Noor", photo: "/team/director-debates.jpg" },
     dd: { role: "Deputy Director", name: "To be announced", photo: "/team/dd-debates.jpg" },
     coordinators: [
       { role: "Coordinator, MUNs", name: "To be announced", photo: "/team/coordinator-muns.jpg" },
-      { role: "Coordinator, Debates", name: "To be announced", photo: "/team/coordinator-debates.jpg" },
+      { role: "Coordinator, Debates", name: "Amber Abdullah", photo: "/team/coordinator-debates.jpg" },
     ],
   },
   {
     id: "operations",
     label: "Operations",
-    director: { role: "Director of Operations", name: "To be announced", photo: "/team/director-operations.jpg" },
+    director: { role: "Director of Operations", name: "Muhammad Umer Abid", photo: "/team/director-operations.jpg" },
     dd: { role: "Deputy Director", name: "To be announced", photo: "/team/dd-operations.jpg" },
     coordinators: [
-      { role: "Media & IT", name: "To be announced", photo: "/team/coordinator-media-it.jpg" },
-      { role: "Marketing", name: "To be announced", photo: "/team/coordinator-marketing.jpg" },
-      { role: "Logistics", name: "To be announced", photo: "/team/coordinator-logistics.jpg" },
+      { role: "Media & IT", name: "Abiha Talat", photo: "/team/coordinator-media-it.jpg" },
+      { role: "Marketing", name: "", photo: "/team/coordinator-marketing.jpg" },
+      { role: "Logistics", name: "Hassan Shakeel", photo: "/team/coordinator-logistics.jpg" },
     ],
   },
 ];
@@ -85,7 +85,7 @@ export default function TheHouse() {
 
       <div style={styles.orgChart}>
         {/* President */}
-        <OrgCard role="President" name="To be announced" photo="/team/president.jpg" big />
+        <OrgCard role="President" name="Meerab Zafar" photo="/team/president.jpg" big />
         <div style={styles.orgStem} />
         <div style={styles.orgBar} />
 
@@ -94,7 +94,7 @@ export default function TheHouse() {
           {/* VP branch — departments live here */}
           <div style={styles.orgCol}>
             <div style={styles.orgStemShort} />
-            <OrgCard role="Vice President" name="To be announced" photo="/team/vice-president.jpg" />
+            <OrgCard role="Vice President" name="Dionyria Katlin" photo="/team/vice-president.jpg" />
             <div style={styles.orgStemShort} />
             <div style={styles.orgBar} />
 
@@ -166,7 +166,7 @@ export default function TheHouse() {
           {/* GS branch — no departments here */}
           <div style={styles.orgCol}>
             <div style={styles.orgStemShort} />
-            <OrgCard role="General Secretary" name="To be announced" photo="/team/general-secretary.jpg" />
+            <OrgCard role="General Secretary" name="Muhammad Haris" photo="/team/general-secretary.jpg" />
             <div style={styles.orgStemShort} />
             <button
               type="button"
