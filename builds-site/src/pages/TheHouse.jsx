@@ -94,7 +94,7 @@ export default function TheHouse() {
           {/* VP branch — departments live here */}
           <div style={styles.orgCol}>
             <div style={styles.orgStemShort} />
-            <OrgCard role="Vice President" name="Dionyria Katlin" photo="/team/vice-president.jpg" />
+            <OrgCard role="Vice President" name="Dionyria Katlin Fardy" photo="/team/vice-president.jpg" />
             <div style={styles.orgStemShort} />
             <div style={styles.orgBar} />
 
