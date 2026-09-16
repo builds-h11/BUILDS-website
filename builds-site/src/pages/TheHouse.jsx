@@ -35,15 +35,15 @@ const ORG_DEPARTMENTS = [
 ];
 
 const BOARD_MEMBERS = [
-  "To be announced", // Member 1
-  "To be announced", // Member 2
-  "To be announced", // Member 3
-  "To be announced", // Member 4
-  "To be announced", // Member 5
-  "To be announced", // Member 6
-  "To be announced", // Member 7
+  "Manager SSC", // Member 1
+  "President", // Member 2
+  "Vice President", // Member 3
+  "General Seretary", // Member 4
+  "Director Operations", // Member 5
+  "Reserved seat for female students", // Member 6
+  "Reserved seat for female students", // Member 7
 ];
-const ROMAN = ["Hello", "II", "III", "IV", "V", "VI", "VII"];
+const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII"];
 
 function OrgAvatar({ label, photo, size = 48 }) {
   const [errored, setErrored] = useState(false);
