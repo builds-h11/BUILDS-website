@@ -35,7 +35,7 @@ const ORG_DEPARTMENTS = [
 ];
 
 const BOARD_MEMBERS = Array.from({ length: 7 }, () => "To be announced");
-const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII"];
+const ROMAN = ["Hello", "II", "III", "IV", "V", "VI", "VII"];
 
 function OrgAvatar({ label, photo, size = 48 }) {
   const [errored, setErrored] = useState(false);
