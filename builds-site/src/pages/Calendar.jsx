@@ -14,13 +14,13 @@ function daysInMonth(y, m) {
   return new Date(y, m + 1, 0).getDate();
 }
 
-function monthKey(m) {
-  return `${new Date().getFullYear()}-${pad(m + 1)}`;
+function monthKey(year, m) {
+  return `${year}-${pad(m + 1)}`;
 }
 
 function buildCells(year, m, byMonth) {
   const byDay = {};
-  for (const ev of byMonth[monthKey(m)] || []) {
+  for (const ev of byMonth[monthKey(year, m)] || []) {
     const d = parseInt((ev.date || "").split("-")[2], 10);
     if (!byDay[d]) byDay[d] = [];
     byDay[d].push(ev);
@@ -81,44 +81,56 @@ function DayCell({ cell, year, today, selectedDate, onSelect }) {
 export default function Calendar({ events }) {
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const year = now.getFullYear();
   const [selected, setSelected] = useState(null);
 
   const byMonth = {};
+  const presentYears = new Set();
   for (const ev of events) {
+    const y = (ev.date || "").slice(0, 4);
+    if (!y) continue;
+    presentYears.add(Number(y));
     const k = (ev.date || "").slice(0, 7);
     if (!byMonth[k]) byMonth[k] = [];
     byMonth[k].push(ev);
   }
+  const sessionYears = presentYears.size ? [...presentYears].sort((a, b) => a - b) : [now.getFullYear()];
+  const sessionLabel = sessionYears.join("–");
 
   return (
     <section style={styles.section}>
-      <div style={styles.sectionEyebrow}>THE SESSION · {year}</div>
+      <div style={styles.sectionEyebrow}>THE SESSION · {sessionLabel}</div>
       <h2 style={styles.h2}>BUILDS Calendar</h2>
       <p style={{ ...styles.bodyText, maxWidth: 640 }}>
-        The {year} session at a glance — all twelve months, every date. Days that hold a sitting are
-        ringed in green; today is ringed in white. Click a green day to open its notice.
+        The {sessionLabel} session{sessionYears.length > 1 ? "s" : ""} at a glance — all months, every date.
+        Days that hold a sitting are ringed in green; today is ringed in white. Click a green day to open its notice.
       </p>
-      <div className="cal-year-grid" style={styles.calYearGrid}>
-        {MONTHS.map((m, i) => (
-          <div key={m} className="cal-year-month" style={styles.calYearMonth}>
-            <div style={styles.calYearMonthHead}>
-              <span style={styles.calYearMonthName}>{m}</span>
-              <span style={styles.calYearMonthYear}>{year}</span>
-            </div>
-            <div style={styles.calMonthHeadRow}>
-              {WEEKDAYS.map((d) => <div key={d} style={styles.calMonthHeadCell}>{d}</div>)}
-            </div>
-            <div style={styles.calMonthGrid}>
-              {buildCells(year, i, byMonth).map((cell, idx) =>
-                cell === null
-                  ? <div key={`b${idx}`} style={styles.calDayCell} />
-                  : <DayCell key={`${i}-${cell.d}`} cell={cell} year={year} today={today} selectedDate={selected && selected.date} onSelect={setSelected} />
-              )}
-            </div>
+      {sessionYears.map((year) => (
+        <div key={year}>
+          <div style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 22, fontWeight: 700, color: "var(--ink)", marginTop: 36, marginBottom: -8 }}>
+            Session {year}
           </div>
-        ))}
-      </div>
+          <div className="cal-year-grid" style={styles.calYearGrid}>
+            {MONTHS.map((m, i) => (
+              <div key={m} className="cal-year-month" style={styles.calYearMonth}>
+                <div style={styles.calYearMonthHead}>
+                  <span style={styles.calYearMonthName}>{m}</span>
+                  <span style={styles.calYearMonthYear}>{year}</span>
+                </div>
+                <div style={styles.calMonthHeadRow}>
+                  {WEEKDAYS.map((d) => <div key={d} style={styles.calMonthHeadCell}>{d}</div>)}
+                </div>
+                <div style={styles.calMonthGrid}>
+                  {buildCells(year, i, byMonth).map((cell, idx) =>
+                    cell === null
+                      ? <div key={`b${idx}`} style={styles.calDayCell} />
+                      : <DayCell key={`${i}-${cell.d}`} cell={cell} year={year} today={today} selectedDate={selected && selected.date} onSelect={setSelected} />
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
       {selected && (
         <div style={styles.calDetail}>
           <div style={{ flex: 1 }}>

@@ -7,6 +7,17 @@ export function fmtDate(iso) {
   return d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
 }
 
+export function timeToMinutes(time = "") {
+  const t = (time || "").trim().split(/\s*[-–—]\s*/)[0].trim();
+  const m2 = t.match(/^(\d{1,2})(?::(\d{2}))?\s*([AaPp][Mm])?$/);
+  if (!m2) return 0;
+  let h = parseInt(m2[1], 10);
+  const min = m2[2] ? parseInt(m2[2], 10) : 0;
+  if (m2[3] && m2[3].toLowerCase() === "pm" && h < 12) h += 12;
+  if (m2[3] && m2[3].toLowerCase() === "am" && h === 12) h = 0;
+  return h * 60 + min;
+}
+
 export function eventStartDate(ev) {
   const [y, mo, d] = (ev.date || "2026-01-01").split("-").map(Number);
   let h = 0, m = 0;
@@ -273,16 +284,16 @@ export const styles = {
   coordRow: { display: "flex", gap: 24, justifyContent: "center", flexWrap: "wrap", marginTop: 0, width: "100%" },
   coordCol: { display: "flex", flexDirection: "column", alignItems: "center" },
 
-  galleryGrid: { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16, marginTop: 24 },
-  galleryTile: { aspectRatio: "4/3", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 10, padding: 16 },
-  galleryCaption: { fontFamily: utility, fontSize: 12, color: "#FFFFFF", textAlign: "center", opacity: 0.9 },
-  galleryPhotoTile: { position: "relative", aspectRatio: "4/3", overflow: "hidden", border: "1px solid var(--border)", borderRadius: 2 },
+  galleryGrid: { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gridAutoRows: 88, gridAutoFlow: "dense", gap: 12, marginTop: 24 },
+  galleryTile: { width: "100%", height: "100%", minHeight: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8, padding: 12, overflow: "hidden", borderRadius: 14 },
+  galleryCaption: { fontFamily: utility, fontSize: 11, color: "#FFFFFF", textAlign: "center", opacity: 0.9 },
+  galleryPhotoTile: { position: "relative", width: "100%", height: "100%", overflow: "hidden", border: "1px solid var(--border)", borderRadius: 14 },
   galleryPhotoImg: { width: "100%", height: "100%", objectFit: "cover", display: "block" },
   galleryPhotoCaption: { position: "absolute", left: 0, right: 0, bottom: 0, background: "linear-gradient(transparent, rgba(15,24,48,0.82))", color: "#FFFFFF", fontFamily: utility, fontSize: 11.5, padding: "20px 12px 10px", textAlign: "center" },
   lightbox: { position: "fixed", inset: 0, background: "rgba(4,8,16,0.92)", zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: "48px 16px" },
   lightboxStage: { display: "flex", flexDirection: "column", alignItems: "center", gap: 14, maxWidth: "min(1100px, 90vw)" },
   lightboxImg: { maxWidth: "100%", maxHeight: "78vh", objectFit: "contain", border: "1px solid var(--border)", borderRadius: 4 },
-  lightboxPlate: { width: 320, height: 240, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 4 },
+  lightboxPlate: { width: 320, height: 240, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 14 },
   lightboxCaption: { color: "#E6E9F2", fontFamily: utility, fontSize: 13, letterSpacing: 0.4 },
   lightboxClose: { position: "absolute", top: 18, right: 18, width: 40, height: 40, borderRadius: "50%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.2)", color: "#FFFFFF", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1 },
   lightboxNav: { position: "absolute", top: "50%", transform: "translateY(-50%)", width: 44, height: 44, borderRadius: "50%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.2)", color: "#FFFFFF", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1 },

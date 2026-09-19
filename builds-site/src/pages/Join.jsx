@@ -21,7 +21,7 @@ function isJoinWindowOpen(jw) {
 }
 
 function formatNextOpen(jw) {
-  if (!jw || !jw.openDate) return null;
+  if (!jw || !jw.openDate) return "To be announced";
   const d = new Date(jw.openDate + "T" + (jw.openTime || "09:00"));
   return d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })
     + " at " + d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });

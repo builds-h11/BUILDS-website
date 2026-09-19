@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, Pencil, Trash2, LogOut, Download, Settings, Clock } from "lucide-react";
 import { styles, fmtDate } from "../ui.js";
 export default function AdminPanel({ posts, addPost, updatePost, removePost, submissions, removeSubmission, images, addImage, removeImage, joinWindow, persistJoinWindow, logout }) {
@@ -11,6 +11,10 @@ export default function AdminPanel({ posts, addPost, updatePost, removePost, sub
   const [imgError, setImgError] = useState("");
   const [jwDraft, setJwDraft] = useState(joinWindow);
   const [jwSaved, setJwSaved] = useState(false);
+
+  useEffect(() => {
+    setJwDraft(joinWindow);
+  }, [joinWindow]);
 
   const exportSubmissionsCSV = () => {
     const cols = ["name", "enrollment", "department", "semester", "interests", "activities", "email", "whatsapp", "reason", "date"];

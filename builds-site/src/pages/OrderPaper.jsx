@@ -1,6 +1,6 @@
 import { Calendar, Clock, MapPin, CalendarPlus, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { styles, roman, fmtDate, downloadICS } from "../ui.js";
+import { styles, roman, fmtDate, downloadICS, timeToMinutes } from "../ui.js";
 
 const ORDER_LIMIT = 3;
 
@@ -8,7 +8,7 @@ export default function OrderPaper({ events }) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const sorted = [...events]
-    .sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time))
+    .sort((a, b) => a.date.localeCompare(b.date) || timeToMinutes(a.time) - timeToMinutes(b.time))
     .filter((ev) => new Date(ev.date + "T00:00:00") >= today)
     .slice(0, ORDER_LIMIT);
   return (

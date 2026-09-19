@@ -349,10 +349,12 @@ export async function fetchCalendarEvents() {
   return parseICS(text).filter((e) => e.date >= todayStr);
 }
 
-/* The whole current session year (Jan 1 → Dec 31) — powers the BUILDS Calendar. */
+/* The whole current session — every event from Jan 1 of the current year
+   up to the parse horizon — powers the BUILDS Calendar. Keeps past years out
+   but lets future session years (e.g. 2027) show once they have events. */
 export async function fetchYearEvents() {
   const text = await fetchFeed();
   if (text === null) return null;
-  const prefix = `${new Date().getFullYear()}-`;
-  return parseICS(text).filter((e) => e.date.startsWith(prefix));
+  const start = `${new Date().getFullYear()}-01-01`;
+  return parseICS(text).filter((e) => e.date >= start);
 }

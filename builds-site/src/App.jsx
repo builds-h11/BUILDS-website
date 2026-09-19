@@ -522,7 +522,8 @@ export default function BuildsSite() {
           .nav-desktop { display: none !important; }
           .hamburger-btn { display: none !important; }
           .bottom-nav { display: flex !important; }
-          .two-col, .pillars-grid, .post-grid, .team-grid, .admin-grid, .gallery-grid { grid-template-columns: 1fr !important; }
+          .two-col, .pillars-grid, .post-grid, .team-grid, .admin-grid { grid-template-columns: 1fr !important; }
+          .gallery-grid { grid-template-columns: repeat(2, 1fr) !important; grid-auto-rows: 96px !important; }
           .stats-row { grid-template-columns: repeat(2, 1fr) !important; gap: 24px 16px !important; }
           .org-row-2 { flex-direction: column !important; gap: 36px !important; align-items: center !important; }
           .org-row-3 { grid-template-columns: 1fr !important; max-width: 260px !important; gap: 28px !important; }

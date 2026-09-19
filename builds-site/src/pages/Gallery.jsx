@@ -3,18 +3,42 @@ import { Image as ImageIcon, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { styles } from "../ui.js";
 export default function Gallery({ images = [] }) {
   const shots = [
-    { label: "Annual Championship, Final Round" },
-    { label: "Freshers' Open Mic" },
-    { label: "Adjudicator Training Workshop" },
-    { label: "Inter-University Delegation" },
-    { label: "Literary Circle, Weekly Read" },
-    { label: "Closing Ceremony" },
+    { label: "Annual Championship, Final Round", shape: "2x1" },
+    { label: "Freshers' Open Mic", shape: "1x1" },
+    { label: "Adjudicator Training Workshop", shape: "2x2" },
+    { label: "Inter-University Delegation", shape: "1x1" },
+    { label: "Literary Circle, Weekly Read", shape: "1x2" },
+    { label: "Closing Ceremony", shape: "1x1" },
+    { label: "Debate Finals, Grand Chamber", shape: "1x1" },
+    { label: "Secretariat Inauguration", shape: "1x2" },
+    { label: "Alumni Reunion, East Wing", shape: "2x1" },
+    { label: "Orientation, New Members", shape: "1x1" },
+    { label: "Workshop: Motion & Amendment", shape: "1x2" },
+    { label: "Guest Lecture Series", shape: "1x1" },
+    { label: "Annual Day Rehearsals", shape: "2x2" },
+    { label: "House Session, Winter Term", shape: "1x1" },
+    { label: "Buddy Circle Meet", shape: "2x1" },
+    { label: "Cultural Evening, Amphitheatre", shape: "1x1" },
+    { label: "Outreach: School Debate Clinic", shape: "1x2" },
+    { label: "Panel Discussion, Round Table", shape: "2x1" },
+    { label: "Election Night, Tally Desk", shape: "1x1" },
+    { label: "Reading Society, Archive Hour", shape: "1x2" },
+    { label: "Inter-College MUN", shape: "1x1" },
+    { label: "Felicitation Ceremony", shape: "2x1" },
+    { label: "Mock Parliament, Committee Room", shape: "1x1" },
+    { label: "Year-End Review Board", shape: "1x1" },
   ];
   const palette = ["#16233F", "#2C4A82", "#5C6B8C", "#3B4A6B", "#0F1830", "#1B2A4A"];
+  const shapeStyle = {
+    "1x1": {},
+    "2x1": { gridColumn: "span 2" },
+    "1x2": { gridRow: "span 2" },
+    "2x2": { gridColumn: "span 2", gridRow: "span 2" },
+  };
   const hasReal = images.length > 0;
   const tiles = hasReal
-    ? images.map((img) => ({ id: img.id, label: img.caption, dataUrl: img.dataUrl, color: null, real: true }))
-    : shots.map((s, i) => ({ id: "plate-" + i, label: s.label, dataUrl: null, color: palette[i % palette.length], real: false }));
+    ? images.map((img, i) => ({ id: img.id, label: img.caption, dataUrl: img.dataUrl, color: null, real: true, shape: shots[i % shots.length].shape }))
+    : shots.map((s, i) => ({ id: "plate-" + i, label: s.label, dataUrl: null, color: palette[i % palette.length], real: false, shape: s.shape }));
   const [lightbox, setLightbox] = useState(null);
   useEffect(() => {
     if (lightbox === null) return;
@@ -44,12 +68,12 @@ export default function Gallery({ images = [] }) {
       <div className="gallery-grid" style={styles.galleryGrid}>
         {tiles.map((t, i) =>
           t.real ? (
-            <div key={t.id} style={{ ...styles.galleryPhotoTile, cursor: "pointer" }} onClick={() => setLightbox(i)}>
+            <div key={t.id} style={{ ...styles.galleryPhotoTile, ...shapeStyle[t.shape], cursor: "pointer" }} onClick={() => setLightbox(i)}>
               <img src={t.dataUrl} alt={t.label || "BUILDS event photo"} style={styles.galleryPhotoImg} />
               {t.label && <div style={styles.galleryPhotoCaption}>{t.label}</div>}
             </div>
           ) : (
-            <div key={t.id} style={{ ...styles.galleryTile, background: t.color, cursor: "pointer" }} onClick={() => setLightbox(i)}>
+            <div key={t.id} style={{ ...styles.galleryTile, background: t.color, ...shapeStyle[t.shape], cursor: "pointer" }} onClick={() => setLightbox(i)}>
               <ImageIcon size={22} color="#FFFFFF" style={{ opacity: 0.7 }} />
               <div style={styles.galleryCaption}>{t.label}</div>
             </div>
