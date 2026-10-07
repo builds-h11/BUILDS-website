@@ -25,11 +25,11 @@ const ORG_DEPARTMENTS = [
     id: "operations",
     label: "Operations",
     director: { role: "Director of Operations", name: "Muhammad Umer Abid", photo: "/team/director-operations.jpg" },
-    dd: { role: "Deputy Director", name: "To be announced", photo: "/team/dd-operations.jpg" },
+    dd: { role: "Deputy Director", name: "Muhammad Gillani", photo: "/team/dd-operations.jpg" },
     coordinators: [
       { role: "Media & IT", name: "Abiha Talat", photo: "/team/coordinator-media-it.jpg" },
-      { role: "Marketing", name: "Muhammad Gillani", photo: "/team/coordinator-marketing.jpg" },
-      { role: "Logistics", name: "Hassan Shakeel", photo: "/team/coordinator-logistics.jpg" },
+      { role: "Marketing", name: "To be announced", photo: "/team/coordinator-marketing.jpg" },
+      { role: "Logistics", name: "Hasan Shakeel", photo: "/team/coordinator-logistics.jpg" },
     ],
   },
 ];
